@@ -1,10 +1,9 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/app/ui/components/avatar"
 import { Button } from "@/app/ui/components/button"
-import { auth } from "../../../../../auth.config"
+import { auth } from "../../../../../auth.config";
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/app/ui/components/dropdown-menu"
