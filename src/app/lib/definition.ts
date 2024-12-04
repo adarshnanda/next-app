@@ -1,9 +1,9 @@
-export type Post = {
+export interface Post {
   id: string;
   title: string;
   content: string;
   date: string;
-};
+}
 
 export type User = {
   name: string | undefined | null;

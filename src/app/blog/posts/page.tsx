@@ -1,15 +1,14 @@
-import { posts } from "@/app/lib/placeholder-data";
 import Post from "@/app/ui/components/posts/Post";
-import { connectToDB } from "@/app/lib/data";
+import { getPosts } from "@/app/lib/data";
+import { Post as PostType } from "@/app/lib/definition";
 export default async function Page() {
-  const client = await connectToDB();
+  const posts: PostType[] = await getPosts();
 
   return (
     <>
-    {client&& <>Connected to database</>}
       <h1 className="text-4xl text-purple-800">Posts</h1>
-      {posts.map((post) => (
-        <Post key={post.id} {...post} />
+      {posts?.map((post) => (
+        <Post key={post.id} id={post.id} title={post.title} content={post.content} date={post.date} />
       ))}
     </>
   );
