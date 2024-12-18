@@ -1,10 +1,13 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
+import { User } from "@/app/lib/definition";
+import { getSession } from "next-auth/react";
 
 export default function Page() {
   const router = useRouter();
+  const [user, setUser] = useState<User | null>(null);
   const [formData, setFormData] = useState({
     id: "",
     title: "",
@@ -12,7 +15,9 @@ export default function Page() {
     date: new Date().toISOString().slice(0, 10),
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
       ...prevData,
@@ -20,17 +25,27 @@ export default function Page() {
     }));
   };
 
+  useEffect(() => {
+    getSession().then((session) => {
+      if (session) {
+        setUser(session.user as User);
+      } else {
+        router.push("/blog/posts");
+      }
+    });
+  }, []);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     const uuid: string = uuidv4();
     e.preventDefault();
     fetch(
-      `/api/posts?id=${uuid}&title=${formData.title}&content=${formData.content}&date=${formData.date}`,
+      `/api/posts`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ ...formData, id: uuid }),
+        body: JSON.stringify({ ...formData, id: uuid, author: user?.name }),
       }
     )
       .then(() => {
