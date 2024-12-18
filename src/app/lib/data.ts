@@ -21,8 +21,8 @@ export async function connectToDB() {
 
 export async function getPosts(): Promise<Post[]> {
   try {
+    // This noStore function is used to prevent caching of the query results
     noStore();
-    await new Promise((resolve) => setTimeout(resolve, 3000));
     const data: { rows: Array<Post> } = await sql`SELECT * FROM posts`;
     console.log(data.rows);
     return data.rows;
